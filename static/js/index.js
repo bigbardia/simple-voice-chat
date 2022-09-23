@@ -36,8 +36,8 @@ navigator.mediaDevices.getUserMedia({audio : true}).then(stream => {
 
 
 
-
 socketio.on("receive_voice" , (data) => {
+    console.log(data);
     var audio = new Audio(data);
     audio.play();
 })
@@ -82,10 +82,12 @@ let mute_btn = document.getElementById("mute");
 mute_btn.addEventListener("click", ()=>{
     if (!muted) {
         muted = true;
+        mute_btn.innerText = "unmute"
         socketio.emit("mute")
     }
     else if (muted) {
         muted = false;
+        mute_btn.innerText = "mute"
         socketio.emit("unmute");
     }
     
