@@ -1,4 +1,5 @@
 let username = "";
+
 while (username === ""){
     username =  prompt("Enter a username : ");
     document.cookie = `username=${username}`;
@@ -30,19 +31,15 @@ navigator.mediaDevices.getUserMedia({audio : {"echoCancellation" : true , "noise
 
     setInterval(()=>{
         mediaRecorder.stop();
-    },100);
+    },500);
 
 })
-
 
 
 socketio.on("receive_voice" , (data) => {
-    console.log(data);
     var audio = new Audio(data);
     audio.play();
 })
-
-
 
 
 socketio.on("user_update", (data) => {
@@ -52,7 +49,6 @@ socketio.on("user_update", (data) => {
     for (const uuid in data){
         let username = data[uuid][0];
         let is_mute = data[uuid][1];
-        console.log(is_mute);
         let child_div = document.createElement("div");
         child_div.id = uuid;
         let h2 = document.createElement("h2");
@@ -92,3 +88,31 @@ mute_btn.addEventListener("click", ()=>{
     }
     
 })
+
+
+socketio.on("show_image", (data) => {
+    let main_div = document.getElementById("images");
+    let img = document.createElement("img");
+    img.src = data;
+    img.classList.add("uploaded-image");
+    main_div.append(img);
+
+})
+
+
+let upload_btn = document.getElementById("uploaded-file");
+upload_btn.addEventListener("change", ()=>{
+    
+    let file = upload_btn.files[0];
+    let extension = file.type.split("/")[0];
+
+    if (extension === "image" && file.size <= 1024 * 1024 * 10 ) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            let base64String = reader.result;
+            socketio.emit("upload_file", base64String)
+            upload_btn.value = "";
+        }
+    }
+});

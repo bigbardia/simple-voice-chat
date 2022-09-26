@@ -9,6 +9,19 @@ socketio.async_mode = "gevent"
 
 clients = {}
 
+
+def validate_file(base64String : str):
+    try:
+        if base64String.split(";")[0][:10] == "data:image":
+            base64String = base64String.split(";")[1]
+            size = (len(base64String) * 3) / 4 - base64String.count("=")
+            size /= 1000000
+            if (size <= 10):
+                return True
+    except:
+        return False
+
+
 @socketio.on("connect")
 def user_connected():
     
@@ -28,6 +41,13 @@ def user_disconnected():
 def voice(base64String):
     if session.get("uuid" , False):
         socketio.emit("receive_voice" , base64String , broadcast = True , include_self = False)
+
+
+@socketio.on("upload_file")
+def upload_file(base64String):
+    if session.get("uuid" , False) and validate_file(base64String):
+        socketio.emit("show_image", base64String , broadcast = True)
+
 
 
 @socketio.on("mute")
