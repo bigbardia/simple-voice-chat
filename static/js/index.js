@@ -9,7 +9,7 @@ const socketio = io({"transports" : ['websocket']});
 let muted = false;
 
 
-navigator.mediaDevices.getUserMedia({audio : true}).then(stream => {
+navigator.mediaDevices.getUserMedia({audio : {"echoCancellation" : true , "noiseSuppression" : true}}).then(stream => {
     let mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.start();
 
