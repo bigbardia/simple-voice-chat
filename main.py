@@ -18,6 +18,7 @@ def validate_file(base64String : str):
             size /= 1000000
             if (size <= 10):
                 return True
+        return False
     except:
         return False
 
