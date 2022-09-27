@@ -3,7 +3,7 @@ from flask_socketio import SocketIO
 from uuid import uuid4
 
 app = Flask(__name__, template_folder="templates" , static_folder="static")
-socketio = SocketIO(app , logger=True )
+socketio = SocketIO(app)
 socketio.async_mode = "gevent"
 
 
@@ -71,5 +71,5 @@ def index():
 
 
 if __name__ == "__main__": 
-    socketio.run(app , debug = True , host="0.0.0.0" , port = 4242 , certfile = "cert.pem" , keyfile = "key.pem")
+    socketio.run(app , host="0.0.0.0" , port = 4242 , certfile = "cert.pem" , keyfile = "key.pem")
 
