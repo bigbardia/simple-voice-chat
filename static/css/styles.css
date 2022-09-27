@@ -1,8 +1,10 @@
+* {
+	font-family: monospace;
+}
+
 body {
     text-align: center;
 }
-
-
 
 .uploaded-image {
     border: solid green;
